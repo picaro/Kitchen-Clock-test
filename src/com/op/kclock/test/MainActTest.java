@@ -72,9 +72,7 @@ public class MainActTest extends ActivityInstrumentationTestCase2<MainActivity> 
 				settimerbtn.performClick();
 			}
 		});
-
 		mInstrumentation.waitForIdleSync();
-
 		LinearLayout alarmsList = (LinearLayout) activity
 				.findViewById(R.id.alarm_layout);
 		assertEquals(1, alarmsList.getChildCount());
@@ -83,6 +81,7 @@ public class MainActTest extends ActivityInstrumentationTestCase2<MainActivity> 
 		final AlarmClock alarm = activity.getAlarmList().get(0);
 		//************* CLICK ON ALARM *******************
 		//final LinearLayout alarmL = (LinearLayout) alarmsList.getChildAt(0);
+		solo.sleep(400);
 		assertTrue(alarm.getWidget().getCurrentTextColor() == context
 				.getResources().getColor(R.color.white));
 		activity.runOnUiThread(new Runnable() {
@@ -138,8 +137,27 @@ public class MainActTest extends ActivityInstrumentationTestCase2<MainActivity> 
 		assertEquals(2, dbHelper.getHistoryList().get(0).getHour());
 
 		//add new alarm via ActionBar
-		//deleteall - need two in history
+		solo.clickOnActionBarItem(R.string.pref_showaddbtn_key);
+		activity.runOnUiThread(new Runnable() {
+			public void run() {
+				hours.setCurrentItem(4);
+			}
+		});
+		activity.runOnUiThread(new Runnable() {
+			public void run() {
+				settimerbtn.performClick();
+			}
+		});
+		solo.sleep(1000);
+		mInstrumentation.waitForIdleSync();
+		//deleteall - need two in history *now trbl
+		//solo.sendKey(Solo.MENU);
+		solo.clickOnMenuItem("Delete all");
+				
 		
+		assertEquals(2, dbHelper.getHistoryList().size());
+				
+		dbHelper.close();
 		solo.finishOpenedActivities();
 	}
 
