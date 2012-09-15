@@ -56,23 +56,9 @@ public class MainActTest extends ActivityInstrumentationTestCase2<MainActivity> 
 		mInstrumentation.waitForIdleSync();
 		assertTrue("Could not find the dialog!", solo.searchText("m"));
 
-		TimePickDialog tPicker = activity.getTimePickDialog();
-		assertNotNull(tPicker);
-
-		final WheelView hours = (WheelView) tPicker.findViewById(R.id.hour);
-		activity.runOnUiThread(new Runnable() {
-			public void run() {
-				hours.setCurrentItem(2);
-			}
-		});
-		final Button settimerbtn = (Button) tPicker
-				.findViewById(R.id.settimerbtn);
-		activity.runOnUiThread(new Runnable() {
-			public void run() {
-				settimerbtn.performClick();
-			}
-		});
+		addAlarm(activity, 2,0,0);
 		mInstrumentation.waitForIdleSync();
+
 		LinearLayout alarmsList = (LinearLayout) activity
 				.findViewById(R.id.alarm_layout);
 		assertEquals(1, alarmsList.getChildCount());
@@ -137,17 +123,9 @@ public class MainActTest extends ActivityInstrumentationTestCase2<MainActivity> 
 		assertEquals(2, dbHelper.getHistoryList().get(0).getHour());
 
 		//add new alarm via ActionBar
-		solo.clickOnActionBarItem(R.string.pref_showaddbtn_key);
-		activity.runOnUiThread(new Runnable() {
-			public void run() {
-				hours.setCurrentItem(4);
-			}
-		});
-		activity.runOnUiThread(new Runnable() {
-			public void run() {
-				settimerbtn.performClick();
-			}
-		});
+		addAlarm(activity, 4,0,0);
+		mInstrumentation.waitForIdleSync();
+		
 		solo.sleep(1000);
 		mInstrumentation.waitForIdleSync();
 		//deleteall - need two in history *now trbl
@@ -159,6 +137,32 @@ public class MainActTest extends ActivityInstrumentationTestCase2<MainActivity> 
 				
 		dbHelper.close();
 		solo.finishOpenedActivities();
+	}
+
+	public static Button addAlarm(MainActivity activity,final int hour,final int min, final int sec) {
+		TimePickDialog tPicker = activity.getTimePickDialog();
+		assertNotNull(tPicker);
+
+		final WheelView hours = (WheelView) tPicker.findViewById(R.id.hour);
+		final WheelView mins = (WheelView) tPicker.findViewById(R.id.mins);
+		final WheelView secs = (WheelView) tPicker.findViewById(R.id.secs);
+
+
+		activity.runOnUiThread(new Runnable() {
+			public void run() {
+				hours.setCurrentItem(hour);
+				mins.setCurrentItem(min);
+				secs.setCurrentItem(sec);
+			}
+		});
+		final Button settimerbtn = (Button) tPicker
+				.findViewById(R.id.settimerbtn);
+		activity.runOnUiThread(new Runnable() {
+			public void run() {
+				settimerbtn.performClick();
+			}
+		});
+		return settimerbtn;
 	}
 
 
