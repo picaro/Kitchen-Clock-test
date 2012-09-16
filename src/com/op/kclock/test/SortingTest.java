@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
+import android.preference.ListPreference;
 import android.preference.PreferenceManager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
@@ -72,15 +73,14 @@ public class SortingTest extends ActivityInstrumentationTestCase2<MainActivity> 
 	    assertEquals(2, activity.getAlarmList().get(0).getHour());
 		//change to runned first
 	     prefs.edit().putString("pref_sortlist_key", "smallfirst");
+	 	//ListPreference pickstyle = (ListPreference) prefs.findPreference("pref_sortlist_key");
+
+	     
 	     MainActTest.addAlarm(activity, 4, 0, 0);
 		
 	     final AlarmClock alarm = activity.getAlarmList().get(1);
-	     activity.runOnUiThread(new Runnable() {
-				public void run() {
-					alarm.setState(AlarmClock.TimerState.PAUSED);
-				}
-			});	
-			mInstrumentation.waitForIdleSync();
+	     MainActTest.tapOnAlarm(activity, 1, AlarmClock.TimerState.PAUSED);	
+	     mInstrumentation.waitForIdleSync();
 
 			
 	     assertEquals(1, activity.getAlarmList().get(0).getHour());

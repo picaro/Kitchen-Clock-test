@@ -7,6 +7,7 @@ import com.op.kclock.MainActivity;
 import com.op.kclock.R;
 import com.op.kclock.dialogs.TimePickDialog;
 import com.op.kclock.model.AlarmClock;
+import com.op.kclock.model.AlarmClock.TimerState;
 import com.op.kclock.utils.DBHelper;
 
 import android.app.Activity;
@@ -64,17 +65,10 @@ public class MainActTest extends ActivityInstrumentationTestCase2<MainActivity> 
 		assertEquals(1, alarmsList.getChildCount());
 
 
-		final AlarmClock alarm = activity.getAlarmList().get(0);
 		//************* CLICK ON ALARM *******************
 		//final LinearLayout alarmL = (LinearLayout) alarmsList.getChildAt(0);
 		solo.sleep(400);
-		assertTrue(alarm.getWidget().getCurrentTextColor() == context
-				.getResources().getColor(R.color.white));
-		activity.runOnUiThread(new Runnable() {
-			public void run() {
-				alarm.setState(AlarmClock.TimerState.PAUSED);
-			}
-		});	
+		final AlarmClock alarm = tapOnAlarm(activity, 0, AlarmClock.TimerState.PAUSED);	
 		mInstrumentation.waitForIdleSync();
 		assertTrue(alarm.getWidget().getCurrentTextColor() == context
 				.getResources().getColor(R.color.gray));
@@ -99,11 +93,7 @@ public class MainActTest extends ActivityInstrumentationTestCase2<MainActivity> 
 		
 			
 		//*************** second Click - run 
-		activity.runOnUiThread(new Runnable() {
-			public void run() {
-				alarm.setState(AlarmClock.TimerState.RUNNING);
-			}
-		});	
+		tapOnAlarm(activity, 0, AlarmClock.TimerState.RUNNING);	
 		mInstrumentation.waitForIdleSync();
 		assertTrue(alarm.getWidget().getCurrentTextColor() == context
 				.getResources().getColor(R.color.white));
@@ -137,6 +127,16 @@ public class MainActTest extends ActivityInstrumentationTestCase2<MainActivity> 
 				
 		dbHelper.close();
 		solo.finishOpenedActivities();
+	}
+
+	public static AlarmClock tapOnAlarm(MainActivity activity, int alarmIndex, final TimerState state) {
+		final AlarmClock alarm = activity.getAlarmList().get(alarmIndex);
+		activity.runOnUiThread(new Runnable() {
+			public void run() {
+				alarm.setState(state);
+			}
+		});
+		return alarm;
 	}
 
 	public static Button addAlarm(MainActivity activity,final int hour,final int min, final int sec) {
