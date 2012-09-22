@@ -1,26 +1,20 @@
 package com.op.kclock.test;
 
 import kankan.wheel.widget.WheelView;
+import android.app.Instrumentation;
+import android.content.Context;
+import android.test.ActivityInstrumentationTestCase2;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.jayway.android.robotium.solo.Solo;
 import com.op.kclock.MainActivity;
 import com.op.kclock.R;
+import com.op.kclock.SettingsActivity;
 import com.op.kclock.dialogs.TimePickDialog;
 import com.op.kclock.model.AlarmClock;
 import com.op.kclock.model.AlarmClock.TimerState;
 import com.op.kclock.utils.DBHelper;
-
-import android.app.Activity;
-import android.app.Instrumentation;
-import android.app.Instrumentation.ActivityMonitor;
-import android.content.Context;
-import android.graphics.Color;
-import android.test.ActivityInstrumentationTestCase2;
-import android.test.TouchUtils;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
 
 public class MainActTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
@@ -115,16 +109,14 @@ public class MainActTest extends ActivityInstrumentationTestCase2<MainActivity> 
 		//add new alarm via ActionBar
 		addAlarm(activity, 4,0,0);
 		mInstrumentation.waitForIdleSync();
-		
 		solo.sleep(1000);
 		mInstrumentation.waitForIdleSync();
 		//deleteall - need two in history *now trbl
-		//solo.sendKey(Solo.MENU);
-		solo.clickOnMenuItem("Delete all");
-				
-		
+		solo.clickOnMenuItem("Delete all");		
 		assertEquals(2, dbHelper.getHistoryList().size());
 				
+		solo.clickOnMenuItem("Settings");		
+		solo.assertCurrentActivity("not settings activity", SettingsActivity.class);
 		dbHelper.close();
 		solo.finishOpenedActivities();
 	}
