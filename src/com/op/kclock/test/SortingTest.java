@@ -1,29 +1,17 @@
 package com.op.kclock.test;
 
-import kankan.wheel.widget.WheelView;
-
-import com.jayway.android.robotium.solo.Solo;
-import com.op.kclock.MainActivity;
-import com.op.kclock.R;
-import com.op.kclock.dialogs.TimePickDialog;
-import com.op.kclock.model.AlarmClock;
-import com.op.kclock.utils.DBHelper;
-
-import android.app.Activity;
 import android.app.Instrumentation;
-import android.app.Instrumentation.ActivityMonitor;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.graphics.Color;
-import android.preference.ListPreference;
 import android.preference.PreferenceManager;
 import android.test.ActivityInstrumentationTestCase2;
-import android.test.TouchUtils;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
+
+import com.jayway.android.robotium.solo.Solo;
+import com.op.kclock.MainActivity;
+import com.op.kclock.dialogs.TimePickDialog;
+import com.op.kclock.model.AlarmClock;
+import com.op.kclock.utils.DBHelper;
 
 public class SortingTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
@@ -72,11 +60,11 @@ public class SortingTest extends ActivityInstrumentationTestCase2<MainActivity> 
 		solo.sleep(1000);
 		assertEquals(2, activity.getAlarmList().get(0).getHour());
 		// change to runned first
-		editor.putString(context.getString(R.string.pref_sortlist_key),
+		editor.putString(context.getString(com.op.kclock.R.string.pref_sortlist_key),
 				MainActivity.SMALLFIRST);
 		editor.commit();
 		String sortType = prefs.getString(
-				context.getString(R.string.pref_sortlist_key),
+				context.getString(com.op.kclock.R.string.pref_sortlist_key),
 				MainActivity.UNSORTED);
 		assertEquals(MainActivity.SMALLFIRST, sortType);
 

@@ -114,7 +114,9 @@ public class MainActTest extends ActivityInstrumentationTestCase2<MainActivity> 
 		//deleteall - need two in history *now trbl
 		solo.clickOnMenuItem("Delete all");		
 		assertEquals(2, dbHelper.getHistoryList().size());
-				
+
+		solo.clickOnMenuItem("Cancel");		
+
 		solo.clickOnMenuItem("Settings");		
 		solo.assertCurrentActivity("not settings activity", SettingsActivity.class);
 		dbHelper.close();
