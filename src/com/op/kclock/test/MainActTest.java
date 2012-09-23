@@ -113,7 +113,9 @@ public class MainActTest extends ActivityInstrumentationTestCase2<MainActivity> 
 		mInstrumentation.waitForIdleSync();
 		//deleteall - need two in history *now trbl
 		solo.clickOnMenuItem("Delete all");		
-		assertEquals(2, dbHelper.getHistoryList().size());
+		mInstrumentation.waitForIdleSync();
+		solo.sleep(1000);
+		assertTrue(dbHelper.getHistoryList().size() >= 2);
 
 		solo.clickOnMenuItem("Cancel");		
 
